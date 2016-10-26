@@ -1,8 +1,8 @@
 <?php
 
-namespace Fortunato\Geomail\Geolocation;
+namespace Geomail\Geolocation;
 
-use Fortunato\Geomail\Email;
+use Geomail\Email;
 
 final class Location
 {

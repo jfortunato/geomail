@@ -1,8 +1,8 @@
 <?php
 
-namespace spec\Fortunato\Geomail\Mailer;
+namespace spec\Geomail\Mailer;
 
-use Fortunato\Geomail\Mailer\Message;
+use Geomail\Mailer\Message;
 use PhpSpec\ObjectBehavior;
 
 class MessageSpec extends ObjectBehavior

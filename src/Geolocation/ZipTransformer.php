@@ -1,8 +1,8 @@
 <?php
 
-namespace Fortunato\Geomail\Geolocation;
+namespace Geomail\Geolocation;
 
-use Fortunato\Geomail\Zip;
+use Geomail\Zip;
 
 interface ZipTransformer
 {

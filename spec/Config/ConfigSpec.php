@@ -1,9 +1,9 @@
 <?php
 
-namespace spec\Fortunato\Geomail\Config;
+namespace spec\Geomail\Config;
 
-use Fortunato\Geomail\Config\Config;
-use Fortunato\Geomail\Email;
+use Geomail\Config\Config;
+use Geomail\Email;
 use PhpSpec\ObjectBehavior;
 
 class ConfigSpec extends ObjectBehavior

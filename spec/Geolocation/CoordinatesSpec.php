@@ -1,10 +1,10 @@
 <?php
 
-namespace spec\Fortunato\Geomail\Geolocation;
+namespace spec\Geomail\Geolocation;
 
-use Fortunato\Geomail\Geolocation\Coordinates;
-use Fortunato\Geomail\Geolocation\Latitude;
-use Fortunato\Geomail\Geolocation\Longitude;
+use Geomail\Geolocation\Coordinates;
+use Geomail\Geolocation\Latitude;
+use Geomail\Geolocation\Longitude;
 use PhpSpec\ObjectBehavior;
 
 class CoordinatesSpec extends ObjectBehavior

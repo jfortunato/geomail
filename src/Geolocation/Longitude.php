@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortunato\Geomail\Geolocation;
+namespace Geomail\Geolocation;
 
 use Webmozart\Assert\Assert;
 

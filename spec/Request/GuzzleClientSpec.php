@@ -1,9 +1,9 @@
 <?php
 
-namespace spec\Fortunato\Geomail\Request;
+namespace spec\Geomail\Request;
 
-use Fortunato\Geomail\Request\Client;
-use Fortunato\Geomail\Request\GuzzleClient;
+use Geomail\Request\Client;
+use Geomail\Request\GuzzleClient;
 use GuzzleHttp\Client as Guzzle;
 use PhpSpec\ObjectBehavior;
 use Psr\Http\Message\ResponseInterface;

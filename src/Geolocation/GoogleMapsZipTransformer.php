@@ -1,10 +1,10 @@
 <?php
 
-namespace Fortunato\Geomail\Geolocation;
+namespace Geomail\Geolocation;
 
-use Fortunato\Geomail\Config\Config;
-use Fortunato\Geomail\Request\Client;
-use Fortunato\Geomail\Zip;
+use Geomail\Config\Config;
+use Geomail\Request\Client;
+use Geomail\Zip;
 
 final class GoogleMapsZipTransformer implements ZipTransformer
 {

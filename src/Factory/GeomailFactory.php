@@ -1,15 +1,15 @@
 <?php
 
-namespace Fortunato\Geomail\Factory;
+namespace Geomail\Factory;
 
-use Fortunato\Geomail\Config\Config;
-use Fortunato\Geomail\Geolocation\GoogleMapsZipTransformer;
-use Fortunato\Geomail\Geolocation\HaversineLocator;
-use Fortunato\Geomail\Geomail;
-use Fortunato\Geomail\Mailer\Mailer;
-use Fortunato\Geomail\Mailer\Message;
-use Fortunato\Geomail\Mailer\SwiftMailMailer;
-use Fortunato\Geomail\Request\GuzzleClient;
+use Geomail\Config\Config;
+use Geomail\Geolocation\GoogleMapsZipTransformer;
+use Geomail\Geolocation\HaversineLocator;
+use Geomail\Geomail;
+use Geomail\Mailer\Mailer;
+use Geomail\Mailer\Message;
+use Geomail\Mailer\SwiftMailMailer;
+use Geomail\Request\GuzzleClient;
 use GuzzleHttp\Client;
 use Swift_Mailer;
 use Swift_SmtpTransport;

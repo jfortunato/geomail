@@ -1,15 +1,15 @@
 <?php
 
-namespace spec\Fortunato\Geomail\Geolocation;
+namespace spec\Geomail\Geolocation;
 
-use Fortunato\Geomail\Config\Config;
-use Fortunato\Geomail\Geolocation\Coordinates;
-use Fortunato\Geomail\Geolocation\GoogleMapsZipTransformer;
-use Fortunato\Geomail\Geolocation\Latitude;
-use Fortunato\Geomail\Geolocation\Longitude;
-use Fortunato\Geomail\Geolocation\ZipTransformer;
-use Fortunato\Geomail\Request\Client;
-use Fortunato\Geomail\Zip;
+use Geomail\Config\Config;
+use Geomail\Geolocation\Coordinates;
+use Geomail\Geolocation\GoogleMapsZipTransformer;
+use Geomail\Geolocation\Latitude;
+use Geomail\Geolocation\Longitude;
+use Geomail\Geolocation\ZipTransformer;
+use Geomail\Request\Client;
+use Geomail\Zip;
 use PhpSpec\ObjectBehavior;
 
 class GoogleMapsZipTransformerSpec extends ObjectBehavior

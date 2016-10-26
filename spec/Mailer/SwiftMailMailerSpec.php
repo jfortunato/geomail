@@ -1,12 +1,12 @@
 <?php
 
-namespace spec\Fortunato\Geomail\Mailer;
+namespace spec\Geomail\Mailer;
 
-use Fortunato\Geomail\Config\Config;
-use Fortunato\Geomail\Email;
-use Fortunato\Geomail\Mailer\Mailer;
-use Fortunato\Geomail\Mailer\Message;
-use Fortunato\Geomail\Mailer\SwiftMailMailer;
+use Geomail\Config\Config;
+use Geomail\Email;
+use Geomail\Mailer\Mailer;
+use Geomail\Mailer\Message;
+use Geomail\Mailer\SwiftMailMailer;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Swift_Mailer;

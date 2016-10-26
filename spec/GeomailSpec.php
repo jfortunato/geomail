@@ -1,16 +1,16 @@
 <?php
 
-namespace spec\Fortunato\Geomail;
+namespace spec\Geomail;
 
-use Fortunato\Geomail\Config\Config;
-use Fortunato\Geomail\Email;
-use Fortunato\Geomail\Factory\GeomailFactory;
-use Fortunato\Geomail\Geolocation\Location;
-use Fortunato\Geomail\Geolocation\Locator;
-use Fortunato\Geomail\Geomail;
-use Fortunato\Geomail\Mailer\Mailer;
-use Fortunato\Geomail\Mailer\Message;
-use Fortunato\Geomail\Zip;
+use Geomail\Config\Config;
+use Geomail\Email;
+use Geomail\Factory\GeomailFactory;
+use Geomail\Geolocation\Location;
+use Geomail\Geolocation\Locator;
+use Geomail\Geomail;
+use Geomail\Mailer\Mailer;
+use Geomail\Mailer\Message;
+use Geomail\Zip;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 

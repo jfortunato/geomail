@@ -1,8 +1,8 @@
 <?php
 
-namespace spec\Fortunato\Geomail\Geolocation;
+namespace spec\Geomail\Geolocation;
 
-use Fortunato\Geomail\Geolocation\Longitude;
+use Geomail\Geolocation\Longitude;
 use PhpSpec\ObjectBehavior;
 
 class LongitudeSpec extends ObjectBehavior

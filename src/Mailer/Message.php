@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortunato\Geomail\Mailer;
+namespace Geomail\Mailer;
 
 final class Message
 {

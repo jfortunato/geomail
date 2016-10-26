@@ -1,8 +1,8 @@
 <?php
 
-namespace spec\Fortunato\Geomail;
+namespace spec\Geomail;
 
-use Fortunato\Geomail\Zip;
+use Geomail\Zip;
 use PhpSpec\ObjectBehavior;
 
 class ZipSpec extends ObjectBehavior

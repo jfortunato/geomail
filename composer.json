@@ -1,5 +1,5 @@
 {
-    "name": "fortunato/geomail",
+    "name": "jfortunato/geomail",
     "description": "Send emails based on geographic location.",
     "authors": [
         {
@@ -9,8 +9,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Fortunato\\Geomail\\": "src/",
-            "spec\\Fortunato\\Geomail\\": "spec/"
+            "Geomail\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "spec\\Geomail\\": "spec/"
         }
     },
     "require": {

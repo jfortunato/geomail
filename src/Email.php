@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortunato\Geomail;
+namespace Geomail;
 
 use InvalidArgumentException;
 

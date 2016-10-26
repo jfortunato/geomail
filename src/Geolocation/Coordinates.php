@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortunato\Geomail\Geolocation;
+namespace Geomail\Geolocation;
 
 final class Coordinates
 {

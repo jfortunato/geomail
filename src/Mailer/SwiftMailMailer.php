@@ -1,9 +1,9 @@
 <?php
 
-namespace Fortunato\Geomail\Mailer;
+namespace Geomail\Mailer;
 
-use Fortunato\Geomail\Config\Config;
-use Fortunato\Geomail\Email;
+use Geomail\Config\Config;
+use Geomail\Email;
 use Swift_Mailer;
 use Swift_Message;
 

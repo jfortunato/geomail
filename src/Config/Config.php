@@ -1,8 +1,8 @@
 <?php
 
-namespace Fortunato\Geomail\Config;
+namespace Geomail\Config;
 
-use Fortunato\Geomail\Email;
+use Geomail\Email;
 use Webmozart\Assert\Assert;
 
 class Config

@@ -1,15 +1,15 @@
 <?php
 
-namespace spec\Fortunato\Geomail\Geolocation;
+namespace spec\Geomail\Geolocation;
 
-use Fortunato\Geomail\Geolocation\Coordinates;
-use Fortunato\Geomail\Geolocation\HaversineLocator;
-use Fortunato\Geomail\Geolocation\Latitude;
-use Fortunato\Geomail\Geolocation\Location;
-use Fortunato\Geomail\Geolocation\Locator;
-use Fortunato\Geomail\Geolocation\Longitude;
-use Fortunato\Geomail\Geolocation\ZipTransformer;
-use Fortunato\Geomail\Zip;
+use Geomail\Geolocation\Coordinates;
+use Geomail\Geolocation\HaversineLocator;
+use Geomail\Geolocation\Latitude;
+use Geomail\Geolocation\Location;
+use Geomail\Geolocation\Locator;
+use Geomail\Geolocation\Longitude;
+use Geomail\Geolocation\ZipTransformer;
+use Geomail\Zip;
 use PhpSpec\ObjectBehavior;
 
 class HaversineLocatorSpec extends ObjectBehavior

@@ -1,13 +1,13 @@
 <?php
 
-namespace Fortunato\Geomail;
+namespace Geomail;
 
-use Fortunato\Geomail\Config\Config;
-use Fortunato\Geomail\Factory\GeomailFactory;
-use Fortunato\Geomail\Geolocation\Location;
-use Fortunato\Geomail\Geolocation\Locator;
-use Fortunato\Geomail\Mailer\Mailer;
-use Fortunato\Geomail\Mailer\Message;
+use Geomail\Config\Config;
+use Geomail\Factory\GeomailFactory;
+use Geomail\Geolocation\Location;
+use Geomail\Geolocation\Locator;
+use Geomail\Mailer\Mailer;
+use Geomail\Mailer\Message;
 use Webmozart\Assert\Assert;
 
 final class Geomail

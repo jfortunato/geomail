@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortunato\Geomail\Request;
+namespace Geomail\Request;
 
 use GuzzleHttp\Client as Guzzle;
 

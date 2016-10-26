@@ -1,8 +1,8 @@
 <?php
 
-namespace Fortunato\Geomail\Mailer;
+namespace Geomail\Mailer;
 
-use Fortunato\Geomail\Email;
+use Geomail\Email;
 
 interface Mailer
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace spec\Fortunato\Geomail\Factory;
+namespace spec\Geomail\Factory;
 
-use Fortunato\Geomail\Factory\GeomailFactory;
+use Geomail\Factory\GeomailFactory;
 use PhpSpec\ObjectBehavior;
 
 class GeomailFactorySpec extends ObjectBehavior
