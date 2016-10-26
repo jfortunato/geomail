@@ -1,0 +1,25 @@
+{
+    "name": "fortunato/geomail",
+    "description": "Send emails based on geographic location.",
+    "authors": [
+        {
+            "name": "Justin Fortunato",
+            "email": "developer@jfortunato.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Fortunato\\Geomail\\": "src/",
+            "spec\\Fortunato\\Geomail\\": "spec/"
+        }
+    },
+    "require": {
+        "php": ">=5.4",
+        "webmozart/assert": "^1.1",
+        "guzzlehttp/guzzle": "^6.2",
+        "swiftmailer/swiftmailer": "^5.4"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^3.1"
+    }
+}

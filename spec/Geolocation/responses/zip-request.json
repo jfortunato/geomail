@@ -1,0 +1,80 @@
+{
+  "results": [
+    {
+      "address_components": [
+        {
+          "long_name": "08080",
+          "short_name": "08080",
+          "types": [
+            "postal_code"
+          ]
+        },
+        {
+          "long_name": "Sewell",
+          "short_name": "Sewell",
+          "types": [
+            "neighborhood",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Gloucester County",
+          "short_name": "Gloucester County",
+          "types": [
+            "administrative_area_level_2",
+            "political"
+          ]
+        },
+        {
+          "long_name": "New Jersey",
+          "short_name": "NJ",
+          "types": [
+            "administrative_area_level_1",
+            "political"
+          ]
+        },
+        {
+          "long_name": "United States",
+          "short_name": "US",
+          "types": [
+            "country",
+            "political"
+          ]
+        }
+      ],
+      "formatted_address": "Sewell, NJ 08080, USA",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 39.810379,
+            "lng": -75.0238739
+          },
+          "southwest": {
+            "lat": 39.7087159,
+            "lng": -75.2276961
+          }
+        },
+        "location": {
+          "lat": 39.7622516,
+          "lng": -75.11951069999999
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 39.810379,
+            "lng": -75.0238739
+          },
+          "southwest": {
+            "lat": 39.7087159,
+            "lng": -75.2276961
+          }
+        }
+      },
+      "place_id": "ChIJh7Q4qc3QxokRDm8CJbctB_g",
+      "types": [
+        "postal_code"
+      ]
+    }
+  ],
+  "status": "OK"
+}

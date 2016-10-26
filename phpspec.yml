@@ -1,0 +1,4 @@
+suites:
+    Fortunato:
+        namespace: Fortunato\Geomail
+        psr4_prefix: Fortunato\Geomail
