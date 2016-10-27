@@ -27,7 +27,7 @@ final class GeomailFactory
         $client = new GuzzleClient(new Client);
         $locator = new HaversineLocator(new GoogleMapsZipTransformer($config, $client));
 
-        return new Geomail($message, $mailer, $locator);
+        return new Geomail($message, $mailer, $locator, $config);
     }
 
     /**

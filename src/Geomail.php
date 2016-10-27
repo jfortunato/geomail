@@ -24,17 +24,23 @@ final class Geomail
      * @var Locator
      */
     private $locator;
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * @param Message $message
      * @param Mailer $mailer
      * @param Locator $locator
+     * @param Config $config
      */
-    public function __construct(Message $message, Mailer $mailer, Locator $locator)
+    public function __construct(Message $message, Mailer $mailer, Locator $locator, Config $config)
     {
         $this->message = $message;
         $this->mailer = $mailer;
         $this->locator = $locator;
+        $this->config = $config;
     }
 
     /**
@@ -43,14 +49,15 @@ final class Geomail
      *
      * @param $subject
      * @param $html
-     * @param Config $config
+     * @param array $config
+     * @param bool $isDevMode
      * @return Geomail
      */
-    public static function prepare($subject, $html, Config $config)
+    public static function prepare($subject, $html, array $config, $isDevMode = false)
     {
         $message = new Message($subject, $html);
 
-        return GeomailFactory::prepareDefault($message, $config);
+        return GeomailFactory::prepareDefault($message, Config::fromArray($config, $isDevMode));
     }
 
     /**
@@ -65,7 +72,7 @@ final class Geomail
 
         $locations = $this->convertToLocations($locations);
 
-        $location = $this->locator->closestToZip(Zip::fromString($zip), $locations);
+        $location = $this->locator->closestToZip(Zip::fromString($zip), $locations, $this->config->getRange());
 
         $this->mailer->sendHtml($this->message, $location->getEmail());
     }

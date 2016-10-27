@@ -2,6 +2,7 @@
 
 namespace spec\Geomail\Geolocation;
 
+use Geomail\Exception\LocationOutOfRangeException;
 use Geomail\Geolocation\Coordinates;
 use Geomail\Geolocation\HaversineLocator;
 use Geomail\Geolocation\Latitude;
@@ -47,6 +48,22 @@ class HaversineLocatorSpec extends ObjectBehavior
             'email' => 'beverlyHills@example.com',
         ]);
 
-        $this->closestToZip(Zip::fromString('08080'), [$cherryHill, $beverlyHills])->shouldReturn($cherryHill);
+        $this->closestToZip(Zip::fromString('08080'), [$cherryHill, $beverlyHills], 100000)->shouldReturn($cherryHill);
+    }
+
+    function it_should_throw_an_exception_if_there_are_no_locations_within_range(ZipTransformer $transformer)
+    {
+        $transformer->toCoordinates(Zip::fromString('08080'))->willReturn(Coordinates::fromLatLon(
+            Latitude::fromString('39.766415'),
+            Longitude::fromString('-75.112302')
+        ));
+
+        $beverlyHills = Location::fromArray([
+            'latitude' => '34.103003',
+            'longitude' => '-118.410468',
+            'email' => 'beverlyHills@example.com',
+        ]);
+
+        $this->shouldThrow(LocationOutOfRangeException::class)->duringClosestToZip(Zip::fromString('08080'), [$beverlyHills], 1000);
     }
 }

@@ -12,11 +12,13 @@ class ConfigSpec extends ObjectBehavior
     {
         $this->beConstructedThrough('fromArray', [[
             'google_maps_api_key' => 'foo',
+            'range' => 50,
             'mailer_host' => 'smtp.example.org',
             'mailer_port' => 25,
             'mailer_username' => 'user',
             'mailer_password' => 'pass',
             'mailer_from' => 'foo@example.com',
+            'development_email' => 'bar@example.com',
         ]]);
     }
 
@@ -25,9 +27,19 @@ class ConfigSpec extends ObjectBehavior
         $this->shouldHaveType(Config::class);
     }
 
+    function it_should_not_be_in_dev_mode_by_default()
+    {
+        $this->isDevMode()->shouldReturn(false);
+    }
+
     function it_should_get_the_google_maps_api_key()
     {
         $this->getGoogleMapsApiKey()->shouldReturn('foo');
+    }
+
+    function it_should_get_the_range()
+    {
+        $this->getRange()->shouldReturn(50);
     }
 
     function it_should_get_the_mailer_host()
@@ -53,5 +65,21 @@ class ConfigSpec extends ObjectBehavior
     function it_should_get_the_mailer_from()
     {
         $this->getMailerFrom()->shouldBeLike(Email::fromString('foo@example.com'));
+    }
+
+    function it_should_get_the_developer_email_as_the_mailer_from_if_in_dev_mode()
+    {
+        $this->beConstructedThrough('fromArray', [[
+            'google_maps_api_key' => 'foo',
+            'range' => 50,
+            'mailer_host' => 'smtp.example.org',
+            'mailer_port' => 25,
+            'mailer_username' => 'user',
+            'mailer_password' => 'pass',
+            'mailer_from' => 'foo@example.com',
+            'development_email' => 'bar@example.com',
+        ], true]);
+
+        $this->getMailerFrom()->shouldBeLike(Email::fromString('bar@example.com'));
     }
 }

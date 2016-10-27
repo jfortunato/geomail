@@ -2,6 +2,7 @@
 
 namespace Geomail\Geolocation;
 
+use Geomail\Exception\LocationOutOfRangeException;
 use Geomail\Zip;
 
 final class HaversineLocator implements Locator
@@ -24,9 +25,11 @@ final class HaversineLocator implements Locator
     /**
      * @param Zip $zip
      * @param array $locations
+     * @param integer $rangeInMiles
      * @return Location
+     * @throws LocationOutOfRangeException
      */
-    public function closestToZip(Zip $zip, array $locations)
+    public function closestToZip(Zip $zip, array $locations, $rangeInMiles)
     {
         $center = $this->transformer->toCoordinates($zip);
 
@@ -38,10 +41,18 @@ final class HaversineLocator implements Locator
             return $a['distance'] < $b['distance'] ? -1 : 1;
         });
 
-        return $distances[0]['location'];
+        $closest = $distances[0];
+
+        if ((int) $closest['distance'] > $rangeInMiles) {
+            throw new LocationOutOfRangeException($rangeInMiles);
+        }
+
+        return $closest['location'];
     }
 
     /**
+     * Gets the distance between 2 coordinates in miles.
+     *
      * @param Coordinates $from
      * @param Coordinates $to
      * @return float
@@ -60,6 +71,8 @@ final class HaversineLocator implements Locator
         $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
                 cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
 
-        return $angle * self::EARTH_RADIUS;
+        $meters = $angle * self::EARTH_RADIUS;
+
+        return $meters * 0.000621371192;
     }
 }
