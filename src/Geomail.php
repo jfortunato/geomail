@@ -74,7 +74,9 @@ final class Geomail
 
         $location = $this->locator->closestToZip(Zip::fromString($zip), $locations, $this->config->getRange());
 
-        $this->mailer->sendHtml($this->message, $location->getEmail());
+        $to = $this->config->isDevMode() ? $this->config->getDevelopmentEmail() : $location->getEmail();
+
+        $this->mailer->sendHtml($this->message, $to);
     }
 
     /**

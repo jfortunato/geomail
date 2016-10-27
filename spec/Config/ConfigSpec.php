@@ -67,19 +67,8 @@ class ConfigSpec extends ObjectBehavior
         $this->getMailerFrom()->shouldBeLike(Email::fromString('foo@example.com'));
     }
 
-    function it_should_get_the_developer_email_as_the_mailer_from_if_in_dev_mode()
+    function it_should_get_the_development_email()
     {
-        $this->beConstructedThrough('fromArray', [[
-            'google_maps_api_key' => 'foo',
-            'range' => 50,
-            'mailer_host' => 'smtp.example.org',
-            'mailer_port' => 25,
-            'mailer_username' => 'user',
-            'mailer_password' => 'pass',
-            'mailer_from' => 'foo@example.com',
-            'development_email' => 'bar@example.com',
-        ], true]);
-
-        $this->getMailerFrom()->shouldBeLike(Email::fromString('bar@example.com'));
+        $this->getDevelopmentEmail()->shouldBeLike(Email::fromString('bar@example.com'));
     }
 }

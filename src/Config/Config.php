@@ -153,7 +153,7 @@ class Config
      */
     public function getMailerFrom()
     {
-        return $this->isDevMode ? $this->developmentEmail : $this->mailerFrom;
+        return $this->mailerFrom;
     }
 
     /**
@@ -162,5 +162,13 @@ class Config
     public function isDevMode()
     {
         return $this->isDevMode;
+    }
+
+    /**
+     * @return Email
+     */
+    public function getDevelopmentEmail()
+    {
+        return $this->developmentEmail;
     }
 }

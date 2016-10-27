@@ -27,6 +27,7 @@ class GeomailSpec extends ObjectBehavior
 
     function it_should_send_an_email_to_the_closest_location_based_on_zip_code(Locator $locator, Mailer $mailer, Config $config)
     {
+        $config->isDevMode()->willReturn(false);
         $config->getRange()->willReturn(50);
 
         $location = [
@@ -39,6 +40,26 @@ class GeomailSpec extends ObjectBehavior
         $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willReturn(Location::fromArray($location));
 
         $mailer->sendHtml(Argument::type(Message::class), Email::fromString('foo@bar.com'))->shouldBeCalled();
+
+        $this->sendClosest('08080', $locations);
+    }
+
+    function it_should_send_to_the_development_email_in_dev_mode(Locator $locator, Mailer $mailer, Config $config)
+    {
+        $config->isDevMode()->willReturn(true);
+        $config->getRange()->willReturn(50);
+        $config->getDevelopmentEmail()->willReturn(Email::fromString('bar@example.com'));
+
+        $location = [
+            'latitude' => '39.766415',
+            'longitude' => '-75.112302',
+            'email' => 'foo@bar.com',
+        ];
+        $locations = [$location];
+
+        $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willReturn(Location::fromArray($location));
+
+        $mailer->sendHtml(Argument::type(Message::class), Email::fromString('bar@example.com'))->shouldBeCalled();
 
         $this->sendClosest('08080', $locations);
     }
