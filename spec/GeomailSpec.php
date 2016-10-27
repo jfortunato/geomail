@@ -10,6 +10,7 @@ use Geomail\Geolocation\Locator;
 use Geomail\Geomail;
 use Geomail\Mailer\Mailer;
 use Geomail\Mailer\Message;
+use Geomail\Parser\ArrayLocationsParser;
 use Geomail\Zip;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -36,7 +37,7 @@ class GeomailSpec extends ObjectBehavior
             'longitude' => '-75.112302',
             'email' => 'foo@bar.com',
         ];
-        $locations = [$location];
+        $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
 
         $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willReturn(Location::fromArray($location));
 
@@ -58,7 +59,7 @@ class GeomailSpec extends ObjectBehavior
             'longitude' => '-75.112302',
             'email' => 'foo@bar.com',
         ];
-        $locations = [$location];
+        $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
 
         $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willReturn(Location::fromArray($location));
 
@@ -80,7 +81,7 @@ class GeomailSpec extends ObjectBehavior
             'longitude' => '-118.410468',
             'email' => 'beverlyhills@example.com',
         ];
-        $locations = [$location];
+        $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
 
         $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(LocationOutOfRangeException::class);
 
@@ -102,7 +103,7 @@ class GeomailSpec extends ObjectBehavior
             'longitude' => '-118.410468',
             'email' => 'beverlyhills@example.com',
         ];
-        $locations = [$location];
+        $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
 
         $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(LocationOutOfRangeException::class);
 
@@ -124,7 +125,7 @@ class GeomailSpec extends ObjectBehavior
             'longitude' => '-118.410468',
             'email' => 'beverlyhills@example.com',
         ];
-        $locations = [$location];
+        $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
 
         $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(LocationOutOfRangeException::class);
 

@@ -71,14 +71,13 @@ final class Geomail
      * are no locations within the configured range.
      *
      * @param string $zip
-     * @param array $locations
+     * @param Location[] $locations
      * @param Message|null $outOfRangeMessage
      */
     public function sendClosest($zip, array $locations, Message $outOfRangeMessage = null)
     {
         Assert::notEmpty($locations);
-
-        $locations = $this->convertToLocations($locations);
+        Assert::allIsInstanceOf($locations, Location::class);
 
         try {
             $location = $this->locator->closestToZip(Zip::fromString($zip), $locations, $this->config->getRange());
@@ -97,21 +96,6 @@ final class Geomail
             $outOfRangeMessage->getSubject(),
             $outOfRangeMessage->getHtml()
         ));
-    }
-
-    /**
-     * @param array $locations
-     * @return array
-     */
-    private function convertToLocations(array $locations)
-    {
-        return array_map(function (array $location) {
-            Assert::keyExists($location, 'latitude');
-            Assert::keyExists($location, 'longitude');
-            Assert::keyExists($location, 'email');
-
-            return Location::fromArray($location);
-        }, $locations);
     }
 
     /**

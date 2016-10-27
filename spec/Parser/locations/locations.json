@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Foo",
+    "lat": "39.881709",
+    "lon": "-74.955948",
+    "mail": "cherryhill@example.com"
+  },
+  {
+    "name": "Bar",
+    "lat": "34.103003",
+    "lon": "-118.410468",
+    "mail": "beverlyhills@example.com"
+  }
+]
