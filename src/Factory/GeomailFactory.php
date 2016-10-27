@@ -7,7 +7,6 @@ use Geomail\Geolocation\GoogleMapsZipTransformer;
 use Geomail\Geolocation\HaversineLocator;
 use Geomail\Geomail;
 use Geomail\Mailer\Mailer;
-use Geomail\Mailer\Message;
 use Geomail\Mailer\SwiftMailMailer;
 use Geomail\Request\GuzzleClient;
 use GuzzleHttp\Client;
@@ -17,17 +16,18 @@ use Swift_SmtpTransport;
 final class GeomailFactory
 {
     /**
-     * @param Message $message
+     * @param $subject
+     * @param $html
      * @param Config $config
      * @return Geomail
      */
-    public static function prepareDefault(Message $message, Config $config)
+    public static function prepareDefault($subject, $html, Config $config)
     {
         $mailer = self::createMailer($config);
         $client = new GuzzleClient(new Client);
         $locator = new HaversineLocator(new GoogleMapsZipTransformer($config, $client));
 
-        return new Geomail($message, $mailer, $locator, $config);
+        return new Geomail($subject, $html, $mailer, $locator, $config);
     }
 
     /**

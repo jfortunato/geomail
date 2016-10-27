@@ -3,7 +3,6 @@
 namespace Geomail\Mailer;
 
 use Geomail\Config\Config;
-use Geomail\Email;
 use Swift_Mailer;
 use Swift_Message;
 
@@ -26,15 +25,14 @@ final class SwiftMailMailer implements Mailer
 
     /**
      * @param Message $message
-     * @param Email $to
      */
-    public function sendHtml(Message $message, Email $to)
+    public function sendHtml(Message $message)
     {
         $message = Swift_Message::newInstance()
             ->setContentType('text/html')
             ->setSubject($message->getSubject())
             ->setFrom((string) $this->config->getMailerFrom())
-            ->setTo((string) $to)
+            ->setTo((string) $message->getRecipient())
             ->setBody($message->getHtml());
 
         $this->mailer->send($message);

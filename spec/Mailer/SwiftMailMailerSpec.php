@@ -35,6 +35,6 @@ class SwiftMailMailerSpec extends ObjectBehavior
 
         $mailer->send(Argument::type(Swift_Message::class))->shouldBeCalled();
 
-        $this->sendHtml(new Message('My Subject', '<p>Hello</p>'), Email::fromString('bar@example.com'));
+        $this->sendHtml(new Message(Email::fromString('bar@example.com'), 'My Subject', '<p>Hello</p>'));
     }
 }

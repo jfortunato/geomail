@@ -3,6 +3,7 @@
 namespace Geomail;
 
 use Geomail\Config\Config;
+use Geomail\Exception\LocationOutOfRangeException;
 use Geomail\Factory\GeomailFactory;
 use Geomail\Geolocation\Location;
 use Geomail\Geolocation\Locator;
@@ -13,9 +14,13 @@ use Webmozart\Assert\Assert;
 final class Geomail
 {
     /**
-     * @var Message
+     * @var string
      */
-    private $message;
+    private $subject;
+    /**
+     * @var string
+     */
+    private $html;
     /**
      * @var Mailer
      */
@@ -30,14 +35,16 @@ final class Geomail
     private $config;
 
     /**
-     * @param Message $message
+     * @param string $subject
+     * @param string $html
      * @param Mailer $mailer
      * @param Locator $locator
      * @param Config $config
      */
-    public function __construct(Message $message, Mailer $mailer, Locator $locator, Config $config)
+    public function __construct($subject, $html, Mailer $mailer, Locator $locator, Config $config)
     {
-        $this->message = $message;
+        $this->subject = $subject;
+        $this->html = $html;
         $this->mailer = $mailer;
         $this->locator = $locator;
         $this->config = $config;
@@ -55,28 +62,41 @@ final class Geomail
      */
     public static function prepare($subject, $html, array $config, $isDevMode = false)
     {
-        $message = new Message($subject, $html);
-
-        return GeomailFactory::prepareDefault($message, Config::fromArray($config, $isDevMode));
+        return GeomailFactory::prepareDefault($subject, $html, Config::fromArray($config, $isDevMode));
     }
 
     /**
      * Sends an email message to the closest location to the zip.
+     * You can optionally specify a message the will be sent when there
+     * are no locations within the configured range.
      *
      * @param string $zip
      * @param array $locations
+     * @param Message|null $outOfRangeMessage
      */
-    public function sendClosest($zip, array $locations)
+    public function sendClosest($zip, array $locations, Message $outOfRangeMessage = null)
     {
         Assert::notEmpty($locations);
 
         $locations = $this->convertToLocations($locations);
 
-        $location = $this->locator->closestToZip(Zip::fromString($zip), $locations, $this->config->getRange());
+        try {
+            $location = $this->locator->closestToZip(Zip::fromString($zip), $locations, $this->config->getRange());
 
-        $to = $this->config->isDevMode() ? $this->config->getDevelopmentEmail() : $location->getEmail();
+            $recipient = $this->recipientEmail($location->getEmail());
 
-        $this->mailer->sendHtml($this->message, $to);
+            return $this->mailer->sendHtml(new Message($recipient, $this->subject, $this->html));
+        } catch (LocationOutOfRangeException $e) { }
+
+        if (!$outOfRangeMessage) {
+            return;
+        }
+
+        $this->mailer->sendHtml(new Message(
+            $this->recipientEmail($outOfRangeMessage->getRecipient()),
+            $outOfRangeMessage->getSubject(),
+            $outOfRangeMessage->getHtml()
+        ));
     }
 
     /**
@@ -92,5 +112,14 @@ final class Geomail
 
             return Location::fromArray($location);
         }, $locations);
+    }
+
+    /**
+     * @param Email $candidate
+     * @return Email
+     */
+    private function recipientEmail(Email $candidate)
+    {
+        return $this->config->isDevMode() ? $this->config->getDevelopmentEmail() : $candidate;
     }
 }

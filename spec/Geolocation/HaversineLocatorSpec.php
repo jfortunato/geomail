@@ -45,7 +45,7 @@ class HaversineLocatorSpec extends ObjectBehavior
         $beverlyHills = Location::fromArray([
             'latitude' => '34.103003',
             'longitude' => '-118.410468',
-            'email' => 'beverlyHills@example.com',
+            'email' => 'beverlyhills@example.com',
         ]);
 
         $this->closestToZip(Zip::fromString('08080'), [$cherryHill, $beverlyHills], 100000)->shouldReturn($cherryHill);
@@ -61,7 +61,7 @@ class HaversineLocatorSpec extends ObjectBehavior
         $beverlyHills = Location::fromArray([
             'latitude' => '34.103003',
             'longitude' => '-118.410468',
-            'email' => 'beverlyHills@example.com',
+            'email' => 'beverlyhills@example.com',
         ]);
 
         $this->shouldThrow(LocationOutOfRangeException::class)->duringClosestToZip(Zip::fromString('08080'), [$beverlyHills], 1000);
