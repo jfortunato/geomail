@@ -45,7 +45,7 @@ class GeomailSpec extends ObjectBehavior
             return $message->getRecipient() == Email::fromString('foo@bar.com');
         }))->shouldBeCalled();
 
-        $this->sendClosest('08080', $locations);
+        $this->sendClosest('08080', $locations)->shouldReturn(true);
     }
 
     function it_should_send_to_the_development_email_in_dev_mode(Locator $locator, Mailer $mailer, Config $config)
@@ -67,7 +67,7 @@ class GeomailSpec extends ObjectBehavior
             return $message->getRecipient() == Email::fromString('bar@example.com');
         }))->shouldBeCalled();
 
-        $this->sendClosest('08080', $locations);
+        $this->sendClosest('08080', $locations)->shouldReturn(true);
     }
 
     function it_should_send_a_different_message_if_an_out_of_range_message_is_given(Locator $locator, Mailer $mailer, Config $config)
@@ -89,7 +89,7 @@ class GeomailSpec extends ObjectBehavior
             return $message->getSubject() === 'Sorry' && $message->getRecipient() == Email::fromString('client@example.com');
         }))->shouldBeCalled();
 
-        $this->sendClosest('08080', $locations, new Message(Email::fromString('client@example.com'), 'Sorry', '<p>Not in range.</p>'));
+        $this->sendClosest('08080', $locations, new Message(Email::fromString('client@example.com'), 'Sorry', '<p>Not in range.</p>'))->shouldReturn(true);
     }
 
     function it_should_send_a_different_message_to_the_development_email_if_an_out_of_range_message_is_given_in_dev_mode(Locator $locator, Mailer $mailer, Config $config)
@@ -111,7 +111,7 @@ class GeomailSpec extends ObjectBehavior
             return $message->getSubject() === 'Sorry' && $message->getRecipient() == Email::fromString('bar@example.com');
         }))->shouldBeCalled();
 
-        $this->sendClosest('08080', $locations, new Message(Email::fromString('client@example.com'), 'Sorry', '<p>Not in range.</p>'));
+        $this->sendClosest('08080', $locations, new Message(Email::fromString('client@example.com'), 'Sorry', '<p>Not in range.</p>'))->shouldReturn(true);
     }
 
     function it_should_not_send_any_email_if_out_of_range_but_no_message_is_given(Locator $locator, Mailer $mailer, Config $config)
@@ -131,7 +131,7 @@ class GeomailSpec extends ObjectBehavior
 
         $mailer->sendHtml(Argument::any())->shouldNotBeCalled();
 
-        $this->sendClosest('08080', $locations);
+        $this->sendClosest('08080', $locations)->shouldReturn(false);
     }
 
     function it_should_throw_an_exception_if_any_given_locations_cannot_be_converted_to_location_object()

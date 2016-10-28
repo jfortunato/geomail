@@ -73,6 +73,7 @@ final class Geomail
      * @param string $zip
      * @param Location[] $locations
      * @param Message|null $outOfRangeMessage
+     * @return bool Whether any email was sent or not.
      */
     public function sendClosest($zip, array $locations, Message $outOfRangeMessage = null)
     {
@@ -84,11 +85,13 @@ final class Geomail
 
             $recipient = $this->recipientEmail($location->getEmail());
 
-            return $this->mailer->sendHtml(new Message($recipient, $this->subject, $this->html));
+            $this->mailer->sendHtml(new Message($recipient, $this->subject, $this->html));
+
+            return true;
         } catch (LocationOutOfRangeException $e) { }
 
         if (!$outOfRangeMessage) {
-            return;
+            return false;
         }
 
         $this->mailer->sendHtml(new Message(
@@ -96,6 +99,8 @@ final class Geomail
             $outOfRangeMessage->getSubject(),
             $outOfRangeMessage->getHtml()
         ));
+
+        return true;
     }
 
     /**
