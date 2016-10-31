@@ -17,6 +17,8 @@ class JsonLocationsParser implements LocationsParser
     {
         $json = json_decode(file_get_contents($input), true);
 
-        return (new ArrayLocationsParser)($json, $latField, $lonField, $emailField);
+        $parser = new ArrayLocationsParser;
+
+        return $parser($json, $latField, $lonField, $emailField);
     }
 }
