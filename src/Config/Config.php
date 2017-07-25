@@ -38,7 +38,7 @@ class Config
     /**
      * @var Email
      */
-    private $developmentEmail;
+    private $alwaysSendEmail;
     /**
      * @var bool
      */
@@ -52,7 +52,7 @@ class Config
      * @param string $mailerUsername
      * @param string $mailerPassword
      * @param Email $mailerFrom
-     * @param Email $developmentEmail
+     * @param Email $alwaysSendEmail
      * @param bool $isDevMode
      */
     private function __construct(
@@ -63,7 +63,7 @@ class Config
         $mailerUsername,
         $mailerPassword,
         Email $mailerFrom,
-        Email $developmentEmail,
+        Email $alwaysSendEmail,
         $isDevMode = false
     ) {
         Assert::string($googleMapsApiKey);
@@ -81,7 +81,7 @@ class Config
         $this->mailerUsername = $mailerUsername;
         $this->mailerPassword = $mailerPassword;
         $this->mailerFrom = $mailerFrom;
-        $this->developmentEmail = $developmentEmail;
+        $this->alwaysSendEmail = $alwaysSendEmail;
         $this->isDevMode = $isDevMode;
     }
 
@@ -95,7 +95,7 @@ class Config
             $params['mailer_username'],
             $params['mailer_password'],
             Email::fromString($params['mailer_from']),
-            Email::fromString($params['development_email']),
+            Email::fromString($params['geomail_always_send_email']),
             $isDevMode
         );
     }
@@ -167,8 +167,8 @@ class Config
     /**
      * @return Email
      */
-    public function getDevelopmentEmail()
+    public function getAlwaysSendEmail()
     {
-        return $this->developmentEmail;
+        return $this->alwaysSendEmail;
     }
 }

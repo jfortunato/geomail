@@ -48,11 +48,11 @@ class GeomailSpec extends ObjectBehavior
         $this->sendClosest('08080', $locations)->shouldReturn(true);
     }
 
-    function it_should_send_to_the_development_email_in_dev_mode(Locator $locator, Mailer $mailer, Config $config)
+    function it_should_send_to_the_always_send_email_in_dev_mode(Locator $locator, Mailer $mailer, Config $config)
     {
         $config->isDevMode()->willReturn(true);
         $config->getRange()->willReturn(50);
-        $config->getDevelopmentEmail()->willReturn(Email::fromString('bar@example.com'));
+        $config->getAlwaysSendEmail()->willReturn(Email::fromString('bar@example.com'));
 
         $location = [
             'latitude' => '39.766415',
@@ -92,11 +92,11 @@ class GeomailSpec extends ObjectBehavior
         $this->sendClosest('08080', $locations, new Message(Email::fromString('client@example.com'), 'Sorry', '<p>Not in range.</p>'))->shouldReturn(true);
     }
 
-    function it_should_send_a_different_message_to_the_development_email_if_an_out_of_range_message_is_given_in_dev_mode(Locator $locator, Mailer $mailer, Config $config)
+    function it_should_send_a_different_message_to_the_always_send_email_if_an_out_of_range_message_is_given_in_dev_mode(Locator $locator, Mailer $mailer, Config $config)
     {
         $config->isDevMode()->willReturn(true);
         $config->getRange()->willReturn(50);
-        $config->getDevelopmentEmail()->willReturn(Email::fromString('bar@example.com'));
+        $config->getAlwaysSendEmail()->willReturn(Email::fromString('bar@example.com'));
 
         $location = [
             'latitude' => '34.103003',
@@ -118,7 +118,7 @@ class GeomailSpec extends ObjectBehavior
     {
         $config->isDevMode()->willReturn(false);
         $config->getRange()->willReturn(50);
-        $config->getDevelopmentEmail()->willReturn(Email::fromString('bar@example.com'));
+        $config->getAlwaysSendEmail()->willReturn(Email::fromString('bar@example.com'));
 
         $location = [
             'latitude' => '34.103003',
@@ -159,7 +159,7 @@ class GeomailSpec extends ObjectBehavior
             'mailer_username' => 'user',
             'mailer_password' => 'pass',
             'mailer_from' => 'foo@example.com',
-            'development_email' => 'bar@example.com',
+            'geomail_always_send_email' => 'bar@example.com',
         ];
 
         $this->beConstructedThrough('prepare', ['My Subject', '<p>Hello</p>', $config]);

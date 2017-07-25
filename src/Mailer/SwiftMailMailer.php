@@ -28,14 +28,20 @@ final class SwiftMailMailer implements Mailer
      */
     public function sendHtml(Message $message)
     {
-        $message = Swift_Message::newInstance()
+        /** @var Swift_Message $swiftMessage */
+        $swiftMessage = Swift_Message::newInstance()
             ->setContentType('text/html')
             ->setSubject($message->getSubject())
             ->setFrom((string) $this->config->getMailerFrom())
             ->setTo((string) $message->getRecipient())
             ->setBody($message->getHtml());
 
-        $this->mailer->send($message);
+        // always send to the main email unless it is already the recipient
+        if ($message->getRecipient() != $this->config->getAlwaysSendEmail()) {
+            $swiftMessage->setBcc((string) $this->config->getAlwaysSendEmail());
+        }
+
+        $this->mailer->send($swiftMessage);
     }
 }
 

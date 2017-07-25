@@ -109,6 +109,6 @@ final class Geomail
      */
     private function recipientEmail(Email $candidate)
     {
-        return $this->config->isDevMode() ? $this->config->getDevelopmentEmail() : $candidate;
+        return $this->config->isDevMode() ? $this->config->getAlwaysSendEmail() : $candidate;
     }
 }
