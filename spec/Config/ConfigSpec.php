@@ -27,11 +27,6 @@ class ConfigSpec extends ObjectBehavior
         $this->shouldHaveType(Config::class);
     }
 
-    function it_should_not_be_in_dev_mode_by_default()
-    {
-        $this->isDevMode()->shouldReturn(false);
-    }
-
     function it_should_get_the_google_maps_api_key()
     {
         $this->getGoogleMapsApiKey()->shouldReturn('foo');

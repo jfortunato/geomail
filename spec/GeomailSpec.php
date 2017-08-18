@@ -29,7 +29,6 @@ class GeomailSpec extends ObjectBehavior
 
     function it_should_send_an_email_to_the_closest_location_based_on_zip_code(Locator $locator, Mailer $mailer, Config $config)
     {
-        $config->isDevMode()->willReturn(false);
         $config->getRange()->willReturn(50);
 
         $location = [
@@ -48,32 +47,8 @@ class GeomailSpec extends ObjectBehavior
         $this->sendClosest('08080', $locations)->shouldReturn(true);
     }
 
-    function it_should_send_to_the_always_send_email_in_dev_mode(Locator $locator, Mailer $mailer, Config $config)
-    {
-        $config->isDevMode()->willReturn(true);
-        $config->getRange()->willReturn(50);
-        $config->getAlwaysSendEmail()->willReturn(Email::fromString('bar@example.com'));
-
-        $location = [
-            'latitude' => '39.766415',
-            'longitude' => '-75.112302',
-            'email' => 'foo@bar.com',
-        ];
-        $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
-
-        $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willReturn(Location::fromArray($location));
-
-        $mailer->sendHtml(Argument::that(function (Message $message) {
-            return $message->getRecipient() == Email::fromString('bar@example.com');
-        }))->shouldBeCalled();
-
-        $this->sendClosest('08080', $locations)->shouldReturn(true);
-    }
-
     function it_should_send_a_different_message_if_an_out_of_range_message_is_given(Locator $locator, Mailer $mailer, Config $config)
     {
-
-        $config->isDevMode()->willReturn(false);
         $config->getRange()->willReturn(50);
 
         $location = [
@@ -92,31 +67,8 @@ class GeomailSpec extends ObjectBehavior
         $this->sendClosest('08080', $locations, new Message(Email::fromString('client@example.com'), 'Sorry', '<p>Not in range.</p>'))->shouldReturn(true);
     }
 
-    function it_should_send_a_different_message_to_the_always_send_email_if_an_out_of_range_message_is_given_in_dev_mode(Locator $locator, Mailer $mailer, Config $config)
-    {
-        $config->isDevMode()->willReturn(true);
-        $config->getRange()->willReturn(50);
-        $config->getAlwaysSendEmail()->willReturn(Email::fromString('bar@example.com'));
-
-        $location = [
-            'latitude' => '34.103003',
-            'longitude' => '-118.410468',
-            'email' => 'beverlyhills@example.com',
-        ];
-        $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
-
-        $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(LocationOutOfRangeException::class);
-
-        $mailer->sendHtml(Argument::that(function (Message $message) {
-            return $message->getSubject() === 'Sorry' && $message->getRecipient() == Email::fromString('bar@example.com');
-        }))->shouldBeCalled();
-
-        $this->sendClosest('08080', $locations, new Message(Email::fromString('client@example.com'), 'Sorry', '<p>Not in range.</p>'))->shouldReturn(true);
-    }
-
     function it_should_not_send_any_email_if_out_of_range_but_no_message_is_given(Locator $locator, Mailer $mailer, Config $config)
     {
-        $config->isDevMode()->willReturn(false);
         $config->getRange()->willReturn(50);
         $config->getAlwaysSendEmail()->willReturn(Email::fromString('bar@example.com'));
 
