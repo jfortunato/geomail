@@ -39,10 +39,6 @@ class Config
      * @var Email
      */
     private $alwaysSendEmail;
-    /**
-     * @var bool
-     */
-    private $isDevMode;
 
     /**
      * @param string $googleMapsApiKey
@@ -53,7 +49,6 @@ class Config
      * @param string $mailerPassword
      * @param Email $mailerFrom
      * @param Email $alwaysSendEmail
-     * @param bool $isDevMode
      */
     private function __construct(
         $googleMapsApiKey,
@@ -63,8 +58,7 @@ class Config
         $mailerUsername,
         $mailerPassword,
         Email $mailerFrom,
-        Email $alwaysSendEmail,
-        $isDevMode = false
+        Email $alwaysSendEmail
     ) {
         Assert::string($googleMapsApiKey);
         Assert::integer($range);
@@ -72,7 +66,6 @@ class Config
         Assert::integer($mailerPort);
         Assert::string($mailerUsername);
         Assert::string($mailerPassword);
-        Assert::boolean($isDevMode);
 
         $this->googleMapsApiKey = $googleMapsApiKey;
         $this->range = $range;
@@ -82,10 +75,13 @@ class Config
         $this->mailerPassword = $mailerPassword;
         $this->mailerFrom = $mailerFrom;
         $this->alwaysSendEmail = $alwaysSendEmail;
-        $this->isDevMode = $isDevMode;
     }
 
-    public static function fromArray(array $params, $isDevMode = false)
+    /**
+     * @param array $params
+     * @return Config
+     */
+    public static function fromArray(array $params)
     {
         return new Config(
             $params['google_maps_api_key'],
@@ -95,8 +91,7 @@ class Config
             $params['mailer_username'],
             $params['mailer_password'],
             Email::fromString($params['mailer_from']),
-            Email::fromString($params['geomail_always_send_email']),
-            $isDevMode
+            Email::fromString($params['geomail_always_send_email'])
         );
     }
 
@@ -154,14 +149,6 @@ class Config
     public function getMailerFrom()
     {
         return $this->mailerFrom;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isDevMode()
-    {
-        return $this->isDevMode;
     }
 
     /**

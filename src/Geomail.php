@@ -57,12 +57,11 @@ final class Geomail
      * @param $subject
      * @param $html
      * @param array $config
-     * @param bool $isDevMode
      * @return Geomail
      */
-    public static function prepare($subject, $html, array $config, $isDevMode = false)
+    public static function prepare($subject, $html, array $config)
     {
-        return GeomailFactory::prepareDefault($subject, $html, Config::fromArray($config, $isDevMode));
+        return GeomailFactory::prepareDefault($subject, $html, Config::fromArray($config));
     }
 
     /**
@@ -83,7 +82,7 @@ final class Geomail
         try {
             $location = $this->locator->closestToZip(Zip::fromString($zip), $locations, $this->config->getRange());
 
-            $recipient = $this->recipientEmail($location->getEmail());
+            $recipient = $location->getEmail();
 
             $this->mailer->sendHtml(new Message($recipient, $this->subject, $this->html));
 
@@ -95,20 +94,11 @@ final class Geomail
         }
 
         $this->mailer->sendHtml(new Message(
-            $this->recipientEmail($outOfRangeMessage->getRecipient()),
+            $outOfRangeMessage->getRecipient(),
             $outOfRangeMessage->getSubject(),
             $outOfRangeMessage->getHtml()
         ));
 
         return true;
-    }
-
-    /**
-     * @param Email $candidate
-     * @return Email
-     */
-    private function recipientEmail(Email $candidate)
-    {
-        return $this->config->isDevMode() ? $this->config->getAlwaysSendEmail() : $candidate;
     }
 }
