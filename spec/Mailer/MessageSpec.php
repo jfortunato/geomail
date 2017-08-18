@@ -10,7 +10,7 @@ class MessageSpec extends ObjectBehavior
 {
     function let()
     {
-        $this->beConstructedWith(Email::fromString('foo@example.com'), 'Subject', '<p>Hello</p>');
+        $this->beConstructedWith([Email::fromString('foo@example.com')], 'Subject', '<p>Hello</p>');
     }
 
     function it_is_initializable()
@@ -18,9 +18,9 @@ class MessageSpec extends ObjectBehavior
         $this->shouldHaveType(Message::class);
     }
 
-    function it_should_get_the_recipient()
+    function it_should_get_the_recipients()
     {
-        $this->getRecipient()->shouldBeLike(Email::fromString('foo@example.com'));
+        $this->getRecipients()->shouldBeLike([Email::fromString('foo@example.com')]);
     }
 
     function it_should_get_the_subject()

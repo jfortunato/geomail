@@ -33,12 +33,14 @@ final class SwiftMailMailer implements Mailer
             ->setContentType('text/html')
             ->setSubject($message->getSubject())
             ->setFrom((string) $this->config->getMailerFrom())
-            ->setTo((string) $message->getRecipient())
+            ->setTo((string) $message->getRecipients()[0])
             ->setBody($message->getHtml());
 
-        // always send to the main email unless it is already the recipient
-        if ($message->getRecipient() != $this->config->getAlwaysSendEmail()) {
-            $swiftMessage->setBcc((string) $this->config->getAlwaysSendEmail());
+        foreach ($this->config->getAlwaysSendEmails() as $alwaysSendEmail) {
+            // always send to this email unless it is already a recipient
+            if (!in_array($alwaysSendEmail, $message->getRecipients())) {
+                $swiftMessage->setBcc((string) $alwaysSendEmail);
+            }
         }
 
         $this->mailer->send($swiftMessage);

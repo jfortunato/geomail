@@ -84,7 +84,7 @@ final class Geomail
 
             $recipient = $location->getEmail();
 
-            $this->mailer->sendHtml(new Message($recipient, $this->subject, $this->html));
+            $this->mailer->sendHtml(new Message([$recipient], $this->subject, $this->html));
 
             return true;
         } catch (LocationOutOfRangeException $e) { }
@@ -94,7 +94,7 @@ final class Geomail
         }
 
         $this->mailer->sendHtml(new Message(
-            $outOfRangeMessage->getRecipient(),
+            $outOfRangeMessage->getRecipients(),
             $outOfRangeMessage->getSubject(),
             $outOfRangeMessage->getHtml()
         ));

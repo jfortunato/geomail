@@ -18,7 +18,7 @@ class ConfigSpec extends ObjectBehavior
             'mailer_username' => 'user',
             'mailer_password' => 'pass',
             'mailer_from' => 'foo@example.com',
-            'geomail_always_send_email' => 'bar@example.com',
+            'geomail_always_send_emails' => ['bar@example.com'],
         ]]);
     }
 
@@ -62,8 +62,8 @@ class ConfigSpec extends ObjectBehavior
         $this->getMailerFrom()->shouldBeLike(Email::fromString('foo@example.com'));
     }
 
-    function it_should_get_the_always_send_email()
+    function it_should_get_the_always_send_emails()
     {
-        $this->getAlwaysSendEmail()->shouldBeLike(Email::fromString('bar@example.com'));
+        $this->getAlwaysSendEmails()->shouldBeLike([Email::fromString('bar@example.com')]);
     }
 }

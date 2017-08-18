@@ -33,10 +33,10 @@ class SwiftMailMailerSpec extends ObjectBehavior
     {
         $config->getMailerFrom()->willReturn(Email::fromString('foo@example.com'));
 
-        $config->getAlwaysSendEmail()->willReturn(Email::fromString('baz@example.com'));
+        $config->getAlwaysSendEmails()->willReturn([Email::fromString('baz@example.com')]);
 
         $mailer->send(Argument::type(Swift_Message::class))->shouldBeCalled();
 
-        $this->sendHtml(new Message(Email::fromString('bar@example.com'), 'My Subject', '<p>Hello</p>'));
+        $this->sendHtml(new Message([Email::fromString('bar@example.com')], 'My Subject', '<p>Hello</p>'));
     }
 }

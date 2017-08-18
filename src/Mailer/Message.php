@@ -3,13 +3,14 @@
 namespace Geomail\Mailer;
 
 use Geomail\Email;
+use Webmozart\Assert\Assert;
 
 final class Message
 {
     /**
-     * @var Email
+     * @var Email[]
      */
-    private $recipient;
+    private $recipients;
     /**
      * @var string
      */
@@ -20,23 +21,26 @@ final class Message
     private $html;
 
     /**
-     * @param Email $recipient
+     * @param Email[] $recipients
      * @param string $subject
      * @param string $html
      */
-    public function __construct(Email $recipient, $subject, $html)
+    public function __construct(array $recipients, $subject, $html)
     {
-        $this->recipient = $recipient;
+        Assert::allIsInstanceOf($recipients, Email::class);
+        Assert::greaterThanEq(count($recipients), 1);
+
+        $this->recipients = $recipients;
         $this->subject = $subject;
         $this->html = $html;
     }
 
     /**
-     * @return Email
+     * @return Email[]
      */
-    public function getRecipient()
+    public function getRecipients()
     {
-        return $this->recipient;
+        return $this->recipients;
     }
 
     /**

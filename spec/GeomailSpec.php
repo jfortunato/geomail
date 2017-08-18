@@ -41,7 +41,7 @@ class GeomailSpec extends ObjectBehavior
         $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willReturn(Location::fromArray($location));
 
         $mailer->sendHtml(Argument::that(function (Message $message) {
-            return $message->getRecipient() == Email::fromString('foo@bar.com');
+            return $message->getRecipients() == [Email::fromString('foo@bar.com')];
         }))->shouldBeCalled();
 
         $this->sendClosest('08080', $locations)->shouldReturn(true);
@@ -61,16 +61,16 @@ class GeomailSpec extends ObjectBehavior
         $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(LocationOutOfRangeException::class);
 
         $mailer->sendHtml(Argument::that(function (Message $message) {
-            return $message->getSubject() === 'Sorry' && $message->getRecipient() == Email::fromString('client@example.com');
+            return $message->getSubject() === 'Sorry' && $message->getRecipients() == [Email::fromString('client@example.com')];
         }))->shouldBeCalled();
 
-        $this->sendClosest('08080', $locations, new Message(Email::fromString('client@example.com'), 'Sorry', '<p>Not in range.</p>'))->shouldReturn(true);
+        $this->sendClosest('08080', $locations, new Message([Email::fromString('client@example.com')], 'Sorry', '<p>Not in range.</p>'))->shouldReturn(true);
     }
 
     function it_should_not_send_any_email_if_out_of_range_but_no_message_is_given(Locator $locator, Mailer $mailer, Config $config)
     {
         $config->getRange()->willReturn(50);
-        $config->getAlwaysSendEmail()->willReturn(Email::fromString('bar@example.com'));
+        $config->getAlwaysSendEmails()->willReturn([Email::fromString('bar@example.com')]);
 
         $location = [
             'latitude' => '34.103003',
@@ -111,7 +111,7 @@ class GeomailSpec extends ObjectBehavior
             'mailer_username' => 'user',
             'mailer_password' => 'pass',
             'mailer_from' => 'foo@example.com',
-            'geomail_always_send_email' => 'bar@example.com',
+            'geomail_always_send_emails' => ['bar@example.com'],
         ];
 
         $this->beConstructedThrough('prepare', ['My Subject', '<p>Hello</p>', $config]);

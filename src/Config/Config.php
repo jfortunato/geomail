@@ -36,9 +36,9 @@ class Config
      */
     private $mailerFrom;
     /**
-     * @var Email
+     * @var Email[]
      */
-    private $alwaysSendEmail;
+    private $alwaysSendEmails;
 
     /**
      * @param string $googleMapsApiKey
@@ -48,7 +48,7 @@ class Config
      * @param string $mailerUsername
      * @param string $mailerPassword
      * @param Email $mailerFrom
-     * @param Email $alwaysSendEmail
+     * @param Email[] $alwaysSendEmails
      */
     private function __construct(
         $googleMapsApiKey,
@@ -58,7 +58,7 @@ class Config
         $mailerUsername,
         $mailerPassword,
         Email $mailerFrom,
-        Email $alwaysSendEmail
+        Email ...$alwaysSendEmails
     ) {
         Assert::string($googleMapsApiKey);
         Assert::integer($range);
@@ -74,7 +74,7 @@ class Config
         $this->mailerUsername = $mailerUsername;
         $this->mailerPassword = $mailerPassword;
         $this->mailerFrom = $mailerFrom;
-        $this->alwaysSendEmail = $alwaysSendEmail;
+        $this->alwaysSendEmails = $alwaysSendEmails;
     }
 
     /**
@@ -83,6 +83,10 @@ class Config
      */
     public static function fromArray(array $params)
     {
+        $alwaysSendEmails = array_map(function ($email) {
+            return Email::fromString($email);
+        }, $params['geomail_always_send_emails']);
+
         return new Config(
             $params['google_maps_api_key'],
             $params['range'],
@@ -91,7 +95,7 @@ class Config
             $params['mailer_username'],
             $params['mailer_password'],
             Email::fromString($params['mailer_from']),
-            Email::fromString($params['geomail_always_send_email'])
+            ...$alwaysSendEmails
         );
     }
 
@@ -152,10 +156,10 @@ class Config
     }
 
     /**
-     * @return Email
+     * @return Email[]
      */
-    public function getAlwaysSendEmail()
+    public function getAlwaysSendEmails()
     {
-        return $this->alwaysSendEmail;
+        return $this->alwaysSendEmails;
     }
 }
