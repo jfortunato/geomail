@@ -39,7 +39,7 @@ final class SwiftMailMailer implements Mailer
         foreach ($this->config->getAlwaysSendEmails() as $alwaysSendEmail) {
             // always send to this email unless it is already a recipient
             if (!in_array($alwaysSendEmail, $message->getRecipients())) {
-                $swiftMessage->setBcc((string) $alwaysSendEmail);
+                $swiftMessage->addBcc((string) $alwaysSendEmail);
             }
         }
 
