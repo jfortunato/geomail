@@ -101,4 +101,9 @@ final class Geomail
 
         return true;
     }
+
+    public function getMailer(): Mailer
+    {
+        return $this->mailer;
+    }
 }
