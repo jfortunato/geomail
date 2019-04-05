@@ -61,18 +61,19 @@ final class Geomail
     }
 
     /**
-     * Sends an email message to the closest location to the zip.
+     * Sends an email message to the closest location to the postal code.
      *
-     * @param string $zip
+     * @param PostalCode $postalCode
      * @param array $locations
+     * @throws Exception\LocationOutOfRangeException
      */
-    public function sendClosest($zip, array $locations)
+    public function sendClosest(PostalCode $postalCode, array $locations)
     {
         Assert::notEmpty($locations);
 
         $locations = $this->convertToLocations($locations);
 
-        $location = $this->locator->closestToZip(Zip::fromString($zip), $locations, $this->config->getRange());
+        $location = $this->locator->closestToPostalCode($postalCode, $locations, $this->config->getRange());
 
         $this->mailer->sendHtml($this->message, $location->getEmail());
     }

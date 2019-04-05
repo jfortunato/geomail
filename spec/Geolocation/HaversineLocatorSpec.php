@@ -9,13 +9,13 @@ use Geomail\Geolocation\Latitude;
 use Geomail\Geolocation\Location;
 use Geomail\Geolocation\Locator;
 use Geomail\Geolocation\Longitude;
-use Geomail\Geolocation\ZipTransformer;
-use Geomail\Zip;
+use Geomail\Geolocation\PostalCodeTransformer;
+use Geomail\PostalCode;
 use PhpSpec\ObjectBehavior;
 
 class HaversineLocatorSpec extends ObjectBehavior
 {
-    function let(ZipTransformer $transformer)
+    function let(PostalCodeTransformer $transformer)
     {
         $this->beConstructedWith($transformer);
     }
@@ -30,9 +30,9 @@ class HaversineLocatorSpec extends ObjectBehavior
         $this->shouldHaveType(Locator::class);
     }
 
-    function it_uses_the_haversine_formula_to_determine_the_closest_location_to_a_zip(ZipTransformer $transformer)
+    function it_uses_the_haversine_formula_to_determine_the_closest_location_to_a_coordinates(PostalCodeTransformer $transformer)
     {
-        $transformer->toCoordinates(Zip::fromString('08080'))->willReturn(Coordinates::fromLatLon(
+        $transformer->toCoordinates(PostalCode::US('08080'))->willReturn(Coordinates::fromLatLon(
             Latitude::fromString('39.766415'),
             Longitude::fromString('-75.112302')
         ));
@@ -48,12 +48,12 @@ class HaversineLocatorSpec extends ObjectBehavior
             'email' => 'beverlyHills@example.com',
         ]);
 
-        $this->closestToZip(Zip::fromString('08080'), [$cherryHill, $beverlyHills], 100000)->shouldReturn($cherryHill);
+        $this->closestToPostalCode(PostalCode::US('08080'), [$cherryHill, $beverlyHills], 100000)->shouldReturn($cherryHill);
     }
 
-    function it_should_throw_an_exception_if_there_are_no_locations_within_range(ZipTransformer $transformer)
+    function it_should_throw_an_exception_if_there_are_no_locations_within_range(PostalCodeTransformer $transformer)
     {
-        $transformer->toCoordinates(Zip::fromString('08080'))->willReturn(Coordinates::fromLatLon(
+        $transformer->toCoordinates(PostalCode::US('08080'))->willReturn(Coordinates::fromLatLon(
             Latitude::fromString('39.766415'),
             Longitude::fromString('-75.112302')
         ));
@@ -64,6 +64,6 @@ class HaversineLocatorSpec extends ObjectBehavior
             'email' => 'beverlyHills@example.com',
         ]);
 
-        $this->shouldThrow(LocationOutOfRangeException::class)->duringClosestToZip(Zip::fromString('08080'), [$beverlyHills], 1000);
+        $this->shouldThrow(LocationOutOfRangeException::class)->duringClosestToPostalCode(PostalCode::US('08080'), [$beverlyHills], 1000);
     }
 }

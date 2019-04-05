@@ -3,7 +3,7 @@
 namespace Geomail\Factory;
 
 use Geomail\Config\Config;
-use Geomail\Geolocation\GoogleMapsZipTransformer;
+use Geomail\Geolocation\GoogleMapsPostalCodeTransformer;
 use Geomail\Geolocation\HaversineLocator;
 use Geomail\Geomail;
 use Geomail\Mailer\Mailer;
@@ -25,7 +25,7 @@ final class GeomailFactory
     {
         $mailer = self::createMailer($config);
         $client = new GuzzleClient(new Client);
-        $locator = new HaversineLocator(new GoogleMapsZipTransformer($config, $client));
+        $locator = new HaversineLocator(new GoogleMapsPostalCodeTransformer($config, $client));
 
         return new Geomail($message, $mailer, $locator, $config);
     }
