@@ -35,6 +35,8 @@ final class GoogleMapsPostalCodeTransformer implements PostalCodeTransformer
     {
         $key = $this->config->getGoogleMapsApiKey();
 
+        $postalCode = urlencode($postalCode);
+
         $url = "https://maps.googleapis.com/maps/api/geocode/json?address=$postalCode&key=$key";
 
         $json = $this->client->json($url);
