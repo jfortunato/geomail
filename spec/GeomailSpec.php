@@ -11,7 +11,7 @@ use Geomail\Geomail;
 use Geomail\Mailer\Mailer;
 use Geomail\Mailer\Message;
 use Geomail\Parser\ArrayLocationsParser;
-use Geomail\Zip;
+use Geomail\PostalCode;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -27,7 +27,7 @@ class GeomailSpec extends ObjectBehavior
         $this->shouldHaveType(Geomail::class);
     }
 
-    function it_should_send_an_email_to_the_closest_location_based_on_zip_code(Locator $locator, Mailer $mailer, Config $config)
+    function it_should_send_an_email_to_the_closest_location_based_on_postal_code(Locator $locator, Mailer $mailer, Config $config)
     {
         $config->getRange()->willReturn(50);
 
@@ -38,13 +38,13 @@ class GeomailSpec extends ObjectBehavior
         ];
         $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
 
-        $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willReturn(Location::fromArray($location));
+        $locator->closestToPostalCode(Argument::type(PostalCode::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willReturn(Location::fromArray($location));
 
         $mailer->sendHtml(Argument::that(function (Message $message) {
             return $message->getRecipients() == [Email::fromString('foo@bar.com')];
         }))->shouldBeCalled();
 
-        $this->sendClosest('08080', $locations)->shouldReturn(true);
+        $this->sendClosest(PostalCode::US('08080'), $locations)->shouldReturn(true);
     }
 
     function it_should_send_a_different_message_if_an_out_of_range_message_is_given(Locator $locator, Mailer $mailer, Config $config)
@@ -58,13 +58,13 @@ class GeomailSpec extends ObjectBehavior
         ];
         $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
 
-        $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(LocationOutOfRangeException::class);
+        $locator->closestToPostalCode(Argument::type(PostalCode::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(LocationOutOfRangeException::class);
 
         $mailer->sendHtml(Argument::that(function (Message $message) {
             return $message->getSubject() === 'Sorry' && $message->getRecipients() == [Email::fromString('client@example.com')];
         }))->shouldBeCalled();
 
-        $this->sendClosest('08080', $locations, new Message([Email::fromString('client@example.com')], 'Sorry', '<p>Not in range.</p>'))->shouldReturn(true);
+        $this->sendClosest(PostalCode::US('08080'), $locations, new Message([Email::fromString('client@example.com')], 'Sorry', '<p>Not in range.</p>'))->shouldReturn(true);
     }
 
     function it_should_not_send_any_email_if_out_of_range_but_no_message_is_given(Locator $locator, Mailer $mailer, Config $config)
@@ -79,16 +79,16 @@ class GeomailSpec extends ObjectBehavior
         ];
         $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
 
-        $locator->closestToZip(Argument::type(Zip::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(LocationOutOfRangeException::class);
+        $locator->closestToPostalCode(Argument::type(PostalCode::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(LocationOutOfRangeException::class);
 
         $mailer->sendHtml(Argument::any())->shouldNotBeCalled();
 
-        $this->sendClosest('08080', $locations)->shouldReturn(false);
+        $this->sendClosest(PostalCode::US('08080'), $locations)->shouldReturn(false);
     }
 
     function it_should_throw_an_exception_if_any_given_locations_cannot_be_converted_to_location_object()
     {
-        $this->shouldThrow(\InvalidArgumentException::class)->duringSendClosest(Zip::fromString('08080'), [
+        $this->shouldThrow(\InvalidArgumentException::class)->duringSendClosest(PostalCode::US('08080'), [
             [
                 'latitude' => '39.766415',
                 'longitude' => '-75.112302',
@@ -98,7 +98,7 @@ class GeomailSpec extends ObjectBehavior
 
     function it_should_throw_an_exception_if_no_locations_are_given()
     {
-        $this->shouldThrow(\InvalidArgumentException::class)->duringSendClosest('08080', []);
+        $this->shouldThrow(\InvalidArgumentException::class)->duringSendClosest(PostalCode::US('08080'), []);
     }
 
     function it_can_be_created_from_a_prepare_method_using_defaults()

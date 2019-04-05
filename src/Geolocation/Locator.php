@@ -2,16 +2,17 @@
 
 namespace Geomail\Geolocation;
 
-use Geomail\Zip;
+use Geomail\Exception\LocationOutOfRangeException;
+use Geomail\PostalCode;
 
 interface Locator
 {
     /**
-     * @param Zip $zip
+     * @param PostalCode $postalCode
      * @param array $locations
      * @param $rangeInMiles
      * @return Location
      * @throws LocationOutOfRangeException
      */
-    public function closestToZip(Zip $zip, array $locations, $rangeInMiles);
+    public function closestToPostalCode(PostalCode $postalCode, array $locations, $rangeInMiles): Location;
 }

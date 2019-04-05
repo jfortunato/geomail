@@ -3,35 +3,34 @@
 namespace Geomail\Geolocation;
 
 use Geomail\Exception\LocationOutOfRangeException;
-use Geomail\Zip;
+use Geomail\PostalCode;
 
 final class HaversineLocator implements Locator
 {
     const EARTH_RADIUS = 6371000;
-
     /**
-     * @var ZipTransformer
+     * @var PostalCodeTransformer
      */
     private $transformer;
 
     /**
-     * @param ZipTransformer $transformer
+     * @param PostalCodeTransformer $transformer
      */
-    public function __construct(ZipTransformer $transformer)
+    public function __construct(PostalCodeTransformer $transformer)
     {
         $this->transformer = $transformer;
     }
 
     /**
-     * @param Zip $zip
+     * @param PostalCode $postalCode
      * @param array $locations
      * @param integer $rangeInMiles
      * @return Location
      * @throws LocationOutOfRangeException
      */
-    public function closestToZip(Zip $zip, array $locations, $rangeInMiles)
+    public function closestToPostalCode(PostalCode $postalCode, array $locations, $rangeInMiles): Location
     {
-        $center = $this->transformer->toCoordinates($zip);
+        $center = $this->transformer->toCoordinates($postalCode);
 
         $distances = array_map(function (Location $location) use ($center) {
             return ['location' => $location, 'distance' => $this->distance($center, $location->getCoordinates())];

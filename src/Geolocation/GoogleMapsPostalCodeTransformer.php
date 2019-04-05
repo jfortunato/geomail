@@ -3,10 +3,10 @@
 namespace Geomail\Geolocation;
 
 use Geomail\Config\Config;
+use Geomail\PostalCode;
 use Geomail\Request\Client;
-use Geomail\Zip;
 
-final class GoogleMapsZipTransformer implements ZipTransformer
+final class GoogleMapsPostalCodeTransformer implements PostalCodeTransformer
 {
     /**
      * @var Config
@@ -28,14 +28,14 @@ final class GoogleMapsZipTransformer implements ZipTransformer
     }
 
     /**
-     * @param Zip $zip
+     * @param PostalCode $postalCode
      * @return Coordinates
      */
-    public function toCoordinates(Zip $zip)
+    public function toCoordinates(PostalCode $postalCode)
     {
         $key = $this->config->getGoogleMapsApiKey();
 
-        $url = "https://maps.googleapis.com/maps/api/geocode/json?address=$zip&key=$key";
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?address=$postalCode&key=$key";
 
         $json = $this->client->json($url);
 

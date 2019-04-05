@@ -69,18 +69,18 @@ final class Geomail
      * You can optionally specify a message the will be sent when there
      * are no locations within the configured range.
      *
-     * @param string $zip
+     * @param PostalCode $postalCode
      * @param Location[] $locations
      * @param Message|null $outOfRangeMessage
      * @return bool Whether any email was sent or not.
      */
-    public function sendClosest($zip, array $locations, Message $outOfRangeMessage = null)
+    public function sendClosest(PostalCode $postalCode, array $locations, Message $outOfRangeMessage = null)
     {
         Assert::notEmpty($locations);
         Assert::allIsInstanceOf($locations, Location::class);
 
         try {
-            $location = $this->locator->closestToZip(Zip::fromString($zip), $locations, $this->config->getRange());
+            $location = $this->locator->closestToPostalCode($postalCode, $locations, $this->config->getRange());
 
             $recipient = $location->getEmail();
 
