@@ -36,10 +36,10 @@ final class GeomailFactory
      */
     private static function createMailer(Config $config)
     {
-        $transport = Swift_SmtpTransport::newInstance($config->getMailerHost(), $config->getMailerPort())
+        $transport = (new Swift_SmtpTransport($config->getMailerHost(), $config->getMailerPort()))
             ->setUsername($config->getMailerUsername())
             ->setPassword($config->getMailerPassword());
 
-        return new SwiftMailMailer(Swift_Mailer::newInstance($transport), $config);
+        return new SwiftMailMailer(new Swift_Mailer($transport), $config);
     }
 }

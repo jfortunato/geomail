@@ -29,9 +29,8 @@ final class SwiftMailMailer implements Mailer
     public function sendHtml(Message $message)
     {
         /** @var Swift_Message $swiftMessage */
-        $swiftMessage = Swift_Message::newInstance()
+        $swiftMessage = (new Swift_Message($message->getSubject()))
             ->setContentType('text/html')
-            ->setSubject($message->getSubject())
             ->setFrom((string) $this->config->getMailerFrom())
             ->setTo((string) $message->getRecipients()[0])
             ->setBody($message->getHtml());
