@@ -92,8 +92,8 @@ class Config
             $params['range'],
             $params['mailer_host'],
             $params['mailer_port'],
-            $params['mailer_username'],
-            $params['mailer_password'],
+            $params['mailer_username'] || '',
+            $params['mailer_password'] || '',
             Email::fromString($params['mailer_from']),
             ...$alwaysSendEmails
         );
