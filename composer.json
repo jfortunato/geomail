@@ -21,7 +21,7 @@
         "php": ">=7.0",
         "webmozart/assert": "^1.1",
         "guzzlehttp/guzzle": "^6.2",
-        "swiftmailer/swiftmailer": "^5.4"
+        "swiftmailer/swiftmailer": "^5.4 || ^6.0"
     },
     "require-dev": {
         "phpspec/phpspec": "^5.1"
