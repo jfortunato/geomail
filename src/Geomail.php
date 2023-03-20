@@ -4,6 +4,7 @@ namespace Geomail;
 
 use Geomail\Config\Config;
 use Geomail\Exception\LocationOutOfRangeException;
+use Geomail\Exception\UnknownCoordinatesException;
 use Geomail\Factory\GeomailFactory;
 use Geomail\Geolocation\Location;
 use Geomail\Geolocation\Locator;
@@ -72,9 +73,11 @@ final class Geomail
      * @param PostalCode $postalCode
      * @param Location[] $locations
      * @param Message|null $outOfRangeMessage
+     * @param bool $considerUnknownAsOutOfRange
      * @return bool Whether any email was sent or not.
+     * @throws UnknownCoordinatesException
      */
-    public function sendClosest(PostalCode $postalCode, array $locations, Message $outOfRangeMessage = null)
+    public function sendClosest(PostalCode $postalCode, array $locations, Message $outOfRangeMessage = null, bool $considerUnknownAsOutOfRange = true)
     {
         Assert::notEmpty($locations);
         Assert::allIsInstanceOf($locations, Location::class);
@@ -87,7 +90,14 @@ final class Geomail
             $this->mailer->sendHtml(new Message([$recipient], $this->subject, $this->html));
 
             return true;
-        } catch (LocationOutOfRangeException $e) { }
+        } catch (LocationOutOfRangeException $e) {
+        } catch (UnknownCoordinatesException $e) {
+            // There was a problem geocoding the postal code. We can either treat it the same as
+            // an out of range exception or throw it for the caller to handle.
+            if (!$considerUnknownAsOutOfRange) {
+                throw $e;
+            }
+        }
 
         if (!$outOfRangeMessage) {
             return false;

@@ -5,6 +5,7 @@ namespace spec\Geomail;
 use Geomail\Config\Config;
 use Geomail\Email;
 use Geomail\Exception\LocationOutOfRangeException;
+use Geomail\Exception\UnknownCoordinatesException;
 use Geomail\Geolocation\Location;
 use Geomail\Geolocation\Locator;
 use Geomail\Geomail;
@@ -99,6 +100,44 @@ class GeomailSpec extends ObjectBehavior
     function it_should_throw_an_exception_if_no_locations_are_given()
     {
         $this->shouldThrow(\InvalidArgumentException::class)->duringSendClosest(PostalCode::US('08080'), []);
+    }
+
+    function it_should_throw_an_exception_if_the_center_coordinates_cannot_be_determined_and_the_flag_is_not_specified(Locator $locator, Mailer $mailer, Config $config)
+    {
+        $config->getRange()->willReturn(50);
+
+        $location = [
+            'latitude' => '39.766415',
+            'longitude' => '-75.112302',
+            'email' => 'foo@bar.com',
+        ];
+        $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
+
+        $locator->closestToPostalCode(Argument::type(PostalCode::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(UnknownCoordinatesException::class);
+
+        $mailer->sendHtml(Argument::any())->shouldNotBeCalled();
+
+        $this->shouldThrow(UnknownCoordinatesException::class)->duringSendClosest(PostalCode::US('08080'), $locations, new Message([Email::fromString('client@example.com')], 'Sorry', '<p>Not in range.</p>'), false);
+    }
+
+    function it_should_behave_the_save_as_a_known_yet_out_of_range_coordinate_if_the_flag_is_specified(Locator $locator, Mailer $mailer, Config $config)
+    {
+        $config->getRange()->willReturn(50);
+
+        $location = [
+            'latitude' => '34.103003',
+            'longitude' => '-118.410468',
+            'email' => 'beverlyhills@example.com',
+        ];
+        $locations = (new ArrayLocationsParser)([$location], 'latitude', 'longitude', 'email');
+
+        $locator->closestToPostalCode(Argument::type(PostalCode::class), Argument::withEveryEntry(Argument::type(Location::class)), 50)->willThrow(UnknownCoordinatesException::class);
+
+        $mailer->sendHtml(Argument::that(function (Message $message) {
+            return $message->getSubject() === 'Sorry' && $message->getRecipients() == [Email::fromString('client@example.com')];
+        }))->shouldBeCalled();
+
+        $this->sendClosest(PostalCode::US('08080'), $locations, new Message([Email::fromString('client@example.com')], 'Sorry', '<p>Not in range.</p>'), true)->shouldReturn(true);
     }
 
     function it_can_be_created_from_a_prepare_method_using_defaults()
