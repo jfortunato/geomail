@@ -3,6 +3,7 @@
 namespace Geomail\Geolocation;
 
 use Geomail\Config\Config;
+use Geomail\Exception\UnknownCoordinatesException;
 use Geomail\PostalCode;
 use Geomail\Request\Client;
 
@@ -30,16 +31,19 @@ final class GoogleMapsPostalCodeTransformer implements PostalCodeTransformer
     /**
      * @param PostalCode $postalCode
      * @return Coordinates
+     * @throws UnknownCoordinatesException
      */
     public function toCoordinates(PostalCode $postalCode)
     {
         $key = $this->config->getGoogleMapsApiKey();
 
-        $postalCode = urlencode($postalCode);
-
-        $url = "https://maps.googleapis.com/maps/api/geocode/json?address=$postalCode&key=$key";
+        $url = sprintf("https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s", urlencode($postalCode), $key);
 
         $json = $this->client->json($url);
+
+        if (!isset($json['results'][0]['geometry']['location']['lat'], $json['results'][0]['geometry']['location']['lng'])) {
+            throw new UnknownCoordinatesException($postalCode);
+        }
 
         return Coordinates::fromLatLon(
             Latitude::fromString((string) $json['results'][0]['geometry']['location']['lat']),

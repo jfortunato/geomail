@@ -3,6 +3,7 @@
 namespace Geomail\Geolocation;
 
 use Geomail\Exception\LocationOutOfRangeException;
+use Geomail\Exception\UnknownCoordinatesException;
 use Geomail\PostalCode;
 
 final class HaversineLocator implements Locator
@@ -27,6 +28,7 @@ final class HaversineLocator implements Locator
      * @param integer $rangeInMiles
      * @return Location
      * @throws LocationOutOfRangeException
+     * @throws UnknownCoordinatesException
      */
     public function closestToPostalCode(PostalCode $postalCode, array $locations, $rangeInMiles): Location
     {

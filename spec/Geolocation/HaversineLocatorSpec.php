@@ -3,6 +3,7 @@
 namespace spec\Geomail\Geolocation;
 
 use Geomail\Exception\LocationOutOfRangeException;
+use Geomail\Exception\UnknownCoordinatesException;
 use Geomail\Geolocation\Coordinates;
 use Geomail\Geolocation\HaversineLocator;
 use Geomail\Geolocation\Latitude;
@@ -65,5 +66,23 @@ class HaversineLocatorSpec extends ObjectBehavior
         ]);
 
         $this->shouldThrow(LocationOutOfRangeException::class)->duringClosestToPostalCode(PostalCode::US('08080'), [$beverlyHills], 1000);
+    }
+
+    function it_should_throw_an_exception_if_the_center_coordinates_cant_be_determined(PostalCodeTransformer $transformer)
+    {
+        $transformer->toCoordinates(PostalCode::US('99999'))->willThrow(UnknownCoordinatesException::class);
+
+        $cherryHill = Location::fromArray([
+            'latitude' => '39.881709',
+            'longitude' => '-74.955948',
+            'email' => 'cherryhill@example.com',
+        ]);
+        $beverlyHills = Location::fromArray([
+            'latitude' => '34.103003',
+            'longitude' => '-118.410468',
+            'email' => 'beverlyhills@example.com',
+        ]);
+
+        $this->shouldThrow(UnknownCoordinatesException::class)->duringClosestToPostalCode(PostalCode::US('99999'), [$cherryHill, $beverlyHills], 100000);
     }
 }

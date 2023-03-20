@@ -3,6 +3,7 @@
 namespace spec\Geomail\Geolocation;
 
 use Geomail\Config\Config;
+use Geomail\Exception\UnknownCoordinatesException;
 use Geomail\Geolocation\Coordinates;
 use Geomail\Geolocation\GoogleMapsPostalCodeTransformer;
 use Geomail\Geolocation\Latitude;
@@ -41,5 +42,14 @@ class GoogleMapsPostalCodeTransformerSpec extends ObjectBehavior
             Latitude::fromString('39.7622516'),
             Longitude::fromString('-75.11951069999999')
         ));
+    }
+
+    function it_should_throw_an_unknown_coordinates_exception_when_the_google_maps_api_cannot_geocode_the_address(Config $config, Client $client)
+    {
+        $config->getGoogleMapsApiKey()->willReturn('foo');
+
+        $client->json('https://maps.googleapis.com/maps/api/geocode/json?address=99999&key=foo')->willReturn([]);
+
+        $this->shouldThrow(UnknownCoordinatesException::class)->duringToCoordinates(PostalCode::US('99999'));
     }
 }

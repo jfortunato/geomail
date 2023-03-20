@@ -3,6 +3,7 @@
 namespace Geomail\Geolocation;
 
 use Geomail\Exception\LocationOutOfRangeException;
+use Geomail\Exception\UnknownCoordinatesException;
 use Geomail\PostalCode;
 
 interface Locator
@@ -13,6 +14,7 @@ interface Locator
      * @param $rangeInMiles
      * @return Location
      * @throws LocationOutOfRangeException
+     * @throws UnknownCoordinatesException
      */
     public function closestToPostalCode(PostalCode $postalCode, array $locations, $rangeInMiles): Location;
 }
